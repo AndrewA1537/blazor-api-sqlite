@@ -1,0 +1,46 @@
+﻿@page "/students"
+@inject HttpClient Http
+
+<PageTitle>Students</PageTitle>
+
+<h1>Students</h1>
+
+@if (students == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>School</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var student in students)
+            {
+                <tr>
+                    <td>@student.StudentId</td>
+                    <td>@student.FirstName @student.LastName</td>
+                    <td>@student.School</td>
+                    <td><a class="btn btn-success btn-sm" href="/updel/@student.StudentId/edit">Edit</a></td>
+                    <td><a class="btn btn-danger btn-sm" href="/updel/@student.StudentId/del">Delete</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private Student[]? students;
+
+    protected override async Task OnInitializedAsync()
+    {
+        students = await Http.GetFromJsonAsync<Student[]>($"{Constants.BASE_URL}api/students");
+    }
+}
