@@ -42,7 +42,22 @@
     ![Alt text](vsc-solution-explorer.png)
     right click on the Api and Blazor apps and add a reference to the ClassLibrary
 
-6.  **Inside the root of the API app install the following packages**:
+6.  **Open the SchoolLibrary folder in VS Code. Delete Class1.cs, then create a new Student.cs class file and add to it the following code**:
+
+    ```cs
+    public class Student
+    {
+        public string? StudentId { get; set; }
+        [Required]
+        public string? FirstName { get; set; }
+        [Required]
+        public string? LastName { get; set; }
+        [Required]
+        public string? School { get; set; }
+    }
+    ```
+
+7.  **Inside the root of the API app install the following packages**:
 
     ```bash
     dotnet add package Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore
@@ -56,7 +71,7 @@
 
     NOTE: The SqlServer package above is only used for code generation.
 
-7.  **Now we need to add a connection string to the database, inside the API app in appsettings.Development.json add the following string**:
+8.  **Now we need to add a connection string to the database, inside the API app in appsettings.Development.json add the following string**:
 
     ```json
     "ConnectionStrings": {
@@ -64,7 +79,7 @@
     }
     ```
 
-8.  **We will be using the Entity Framework Code First approach. The starting point is to create a database context class. Create a folder named Data in the API project, then add a C# class file named SchoolDbContext.cs in the new Data folder with the following class code**:
+9.  **We will be using the Entity Framework Code First approach. The starting point is to create a database context class. Create a folder named Data in the API project, then add a C# class file named SchoolDbContext.cs in the new Data folder with the following class code**:
 
     ```cs
     public class SchoolDbContext : DbContext
@@ -107,7 +122,7 @@
     }
     ```
 
-9.  **In the Program.cs file in the SchoolAPI project, add the following code above var app = builder.Build(); so that our application can use SQLite**:
+10. **In the Program.cs file in the SchoolAPI project, add the following code above var app = builder.Build(); so that our application can use SQLite**:
 
     ```cs
     var connectionString =
@@ -119,28 +134,22 @@
     var app = builder.Build(); // ================================== Everything above is a service that we add, everything below is a service that we use
     ```
 
-10. **We are now ready to apply Entity Framework migrations, create the database and seed data. Remember to build your entire solution before proceeding. Then, from within a terminal window in the SchoolAPI directory, run the following command to create migrations**:
+11. **We are now ready to apply Entity Framework migrations, create the database and seed data. Remember to build your entire solution before proceeding. Then, from within a terminal window in the SchoolAPI directory, run the following command to create migrations**:
 
     ```bash
     dotnet ef migrations add M1 -o Data/Migrations
     ```
 
-11. **The next step is to create the SchoolDB database in SQLite. This is done by running the following command from inside a terminal window at the SchoolAPI folder**:
+12. **The next step is to create the SchoolDB database in SQLite. This is done by running the following command from inside a terminal window at the SchoolAPI folder**:
 
     ```bash
     dotnet ef database update
     ```
 
-12. **If no errors are encountered, we can assume that the database was created and properly seeded with data. Let us create an API controller so that we can see the data that is in our database**:
+13. **If no errors are encountered, we can assume that the database was created and properly seeded with data. Let us create an API controller so that we can see the data that is in our database**:
 
     ```bash
     dotnet aspnet-codegenerator controller -name StudentsController -async -api -m Student -dc SchoolDbContext -outDir Controllers
-    ```
-
-13. **Now you can run the application by the following in a terminal window inside the API project**:
-
-    ```bash
-    dotnet watch
     ```
 
 14. **Now you can run the application by the following in a terminal window inside the API project**:
@@ -149,38 +158,44 @@
     dotnet watch
     ```
 
-15. **Point your browser to https://localhost:XXXX/api/students and you will see the following**:
+15. **Now you can run the application by the following in a terminal window inside the API project**:
+
+    ```bash
+    dotnet watch
+    ```
+
+16. **Point your browser to https://localhost:XXXX/api/students and you will see the following**:
 
     ```json
     [
         {
-        "studentId": "38e539e5-359d-435d-8661-760a0e897cc5",
-        "firstName": "Tom",
-        "lastName": "Day",
-        "school": "Physics"
+            "studentId": "38e539e5-359d-435d-8661-760a0e897cc5",
+            "firstName": "Tom",
+            "lastName": "Day",
+            "school": "Physics"
         },
         {
-        "studentId": "9f603214-6bfc-482d-86e1-6665e5d8a4b2",
-        "firstName": "Art",
-        "lastName": "Ash",
-        "school": "Nursing"
+            "studentId": "9f603214-6bfc-482d-86e1-6665e5d8a4b2",
+            "firstName": "Art",
+            "lastName": "Ash",
+            "school": "Nursing"
         },
         {
-        "studentId": "aafd60ec-0364-4c82-b5a2-8a0e617faeef",
-        "firstName": "Mia",
-        "lastName": "Hay",
-        "school": "Science"
+            "studentId": "aafd60ec-0364-4c82-b5a2-8a0e617faeef",
+            "firstName": "Mia",
+            "lastName": "Hay",
+            "school": "Science"
         },
         {
-        "studentId": "c589163b-ca78-4f62-8873-110d9e0d0fe6",
-        "firstName": "Ann",
-        "lastName": "Fox",
-        "school": "Geology"
+            "studentId": "c589163b-ca78-4f62-8873-110d9e0d0fe6",
+            "firstName": "Ann",
+            "lastName": "Fox",
+            "school": "Geology"
         }
     ]
     ```
 
-16. **Even though our API app seems to be working fine, there is one more thing we need to do. We need to enable CORS (Cross Origin Resource Sharing) so that the service can be accessed from other domains. Add the following code to the Program.cs file before “var app = builder.Build();”**:
+17. **Even though our API app seems to be working fine, there is one more thing we need to do. We need to enable CORS (Cross Origin Resource Sharing) so that the service can be accessed from other domains. Add the following code to the Program.cs file before “var app = builder.Build();”**:
 
     ```cs
     // Add Cors
@@ -192,26 +207,26 @@
     }));
     ```
 
-17. **Add this statement in the Configure() method also in Program.cs just before “app.MapControllers();”**:
+18. **Add this statement in the Configure() method also in Program.cs just before “app.MapControllers();”**:
 
     ```cs
     // add CORS
     app.UseCors("Policy");
     ```
 
-18. **Add the following annotation to the StudentsController.cs class**:
+19. **Add the following annotation to the StudentsController.cs class**:
 
     ```cs
     [EnableCors("Policy")]
     ```
 
-19. **We will add a Students razor page and menu item to this client-side Blazor application. Open the \_Imports.razor file in the editor and add the following using statement to the bottom of the content so that the Student class is available to all views**:
+20. **We will add a Students razor page and menu item to this client-side Blazor application. Open the \_Imports.razor file in the editor and add the following using statement to the bottom of the content so that the Student class is available to all views**:
 
     ```cs
     @using SchoolLibrary
     ```
 
-20. **Make a duplicate copy of the Pages/FetchData.razor file and call the new file GetAllStudents.razor. Replace its contents with the following code**:
+21. **Make a duplicate copy of the Pages/FetchData.razor file and call the new file GetAllStudents.razor. Replace its contents with the following code**:
 
     ```cs
     @page "/students"
@@ -262,7 +277,7 @@
     }
     ```
 
-21. **Make sure you adjust the value of baseUrl to match the URL of your SchoolAPI service. The URL of the API service will be used in multiple pages Therefore, it should be placed soewhere where it can be shared. Create a class named Constants.cs in the root folder with the following code**:
+22. **Make sure you adjust the value of baseUrl to match the URL of your SchoolAPI service. The URL of the API service will be used in multiple pages Therefore, it should be placed soewhere where it can be shared. Create a class named Constants.cs in the root folder with the following code**:
 
     ```cs
     public class Constants
@@ -271,7 +286,7 @@
     }
     ```
 
-22. **Let us add a menu item to the left-side navigation of our client application. Open Shared/NavMenu.razor in the editor and add the following**:
+23. **Let us add a menu item to the left-side navigation of our client application. Open Shared/NavMenu.razor in the editor and add the following**:
 
     ```cs
     <div class="nav-item px-3">
@@ -286,7 +301,7 @@
     </div>
     ```
 
-23. **Create a new razor page named AddStudent.razor with the following code**:
+24. **Create a new razor page named AddStudent.razor with the following code**:
 
     ```cs
     @page "/add"
@@ -326,7 +341,7 @@
     }
     ```
 
-24. **Create a named UpdateDelete.razor with the following content**:
+25. **Create a named UpdateDelete.razor with the following content**:
 
     ```cs
     @page "/updel/{id}/{mode}"
@@ -398,3 +413,5 @@
         }
     }
     ```
+
+    
