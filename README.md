@@ -40,6 +40,8 @@
 5.  **Open the project in VSC and open the solution explorer**:
 
     ![Alt text](vsc-solution-explorer.png)
+    <br />
+    <br />
     right click on the Api and Blazor apps and add a reference to the ClassLibrary
 
 6.  **Open the SchoolLibrary folder in VS Code. Delete Class1.cs, then create a new Student.cs class file and add to it the following code**:
